@@ -78,6 +78,44 @@ Source Code (.bloop file)
 
 ---
 
+## 📁 Project Structure
+
+```
+bloop/
+├── src/
+│   ├── bloop/
+│   │   ├── Bloop.java          ← CLI entry point
+│   │   ├── Lexer.java          ← Tokenizer
+│   │   ├── Token.java          ← Token class
+│   │   ├── TokenType.java      ← Token enum
+│   │   ├── Parser.java         ← AST builder
+│   │   ├── Interpreter.java    ← Tree executor
+│   │   └── BloopError.java     ← Error messages
+│   │
+│   └── bloop/ast/
+│       ├── ASTNode.java        ← Interface
+│       ├── AssignNode.java     ← put x into y
+│       ├── PrintNode.java      ← print z
+│       ├── IfNode.java         ← if / else
+│       ├── RepeatNode.java     ← repeat N times
+│       ├── BinaryOpNode.java   ← x + y * 2
+│       ├── CompareNode.java    ← z > 30
+│       ├── NumberNode.java     ← 10, 3.14
+│       ├── StringNode.java     ← "hello"
+│       └── VariableNode.java   ← x, y, z
+│
+├── examples/
+│   ├── hello.bloop
+│   ├── math.bloop
+│   ├── conditions.bloop
+│   └── loops.bloop
+│
+├── tests/
+│   └── bloop/BloopTest.java
+│
+└── README.md
+```
+
 ## Setup & Run
 
 ```bash
@@ -110,12 +148,61 @@ repeat 4 times:
 
 ---
 
-## Team
+## 👥 Team
 
-| Member | Responsibility |
-|--------|---------------|
-| Ravi Mourya | Tokenizer |
-| Manoj Kharkar | Parser + Expression nodes |
-| Jamal Akhtar | Instructions + Environment + Main |
+| Member | Role | Branch |
+|--------|------|--------|
+| **Ravi Mourya** | Tokenizer (Lexer + Tokens) | `feature/lexer` |
+| **Manoj Kharkar** | Parsing (AST + Parser) | `feature/parser-ast` |
+| **Jamal Akhtar** | Interpreter + CLI + Examples | `feature/interpreter` |
 
 ---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Java 17 or higher — check with `java -version`
+- Git — check with `git --version`
+- IDE: IntelliJ IDEA Community Edition (recommended)
+
+### Step 1 — Clone the Repository
+
+```bash
+git clone https://github.com/your-team/bloop-lang.git
+cd bloop-lang
+```
+
+### Step 2 — Compile All Source Files
+
+Run from inside the `bloop/` root folder:
+
+```bash
+javac -d out src/bloop/*.java src/bloop/ast/*.java
+```
+
+This creates an `out/` folder containing all compiled `.class` files.
+
+### Step 3 — Write a `.bloop` Program
+
+Create `examples/hello.bloop` and write your BLOOP code.
+
+### Step 4 — Run the Program
+
+```bash
+java -cp out bloop.Bloop examples/hello.bloop
+```
+
+### Step 5 — Run the Test Suite
+
+```bash
+javac -d out src/bloop/*.java src/bloop/ast/*.java tests/bloop/BloopTest.java
+java -cp out bloop.BloopTest
+```
+
+### Step 6 — Package as a JAR (Optional)
+
+```bash
+jar cfe bloop.jar bloop.Bloop -C out .
+java -jar bloop.jar examples/hello.bloop
+```
