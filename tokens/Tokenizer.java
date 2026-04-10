@@ -200,42 +200,37 @@ public class Tokenizer {
    }
 
    private Token readWord() {
-      int var1 = this.line;
-      int var2 = this.currentLineIndent;
-      StringBuilder var3 = new StringBuilder();
+      int line = this.line;
+      int indent = this.currentLineIndent;
+      StringBuilder word = new StringBuilder();
 
-      while(this.pos < this.source.length() && (Character.isLetterOrDigit(this.source.charAt(this.pos)) || this.source.charAt(this.pos) == '_')) {
-         var3.append(this.source.charAt(this.pos++));
+      while (this.pos < this.source.length() &&
+            (Character.isLetterOrDigit(this.source.charAt(this.pos)) ||
+            this.source.charAt(this.pos) == '_')) {
+         word.append(this.source.charAt(this.pos++));
       }
 
-      switch (var3.toString()) {
-         case "put" -> {
-            return new Token(TokenType.PUT, var4, var1, var2);
-         }
-         case "into" -> {
-            return new Token(TokenType.INTO, var4, var1, var2);
-         }
-         case "print" -> {
-            return new Token(TokenType.PRINT, var4, var1, var2);
-         }
-         case "if" -> {
-            return new Token(TokenType.IF, var4, var1, var2);
-         }
-         case "then" -> {
-            return new Token(TokenType.THEN, var4, var1, var2);
-         }
-         case "else" -> {
-            return new Token(TokenType.ELSE, var4, var1, var2);
-         }
-         case "repeat" -> {
-            return new Token(TokenType.REPEAT, var4, var1, var2);
-         }
-         case "times" -> {
-            return new Token(TokenType.TIMES, var4, var1, var2);
-         }
-         default -> {
-            return new Token(TokenType.IDENTIFIER, var4, var1, var2);
-         }
+      String value = word.toString();
+
+      switch (value) {
+         case "put":
+               return new Token(TokenType.PUT, value, line, indent);
+         case "into":
+               return new Token(TokenType.INTO, value, line, indent);
+         case "print":
+               return new Token(TokenType.PRINT, value, line, indent);
+         case "if":
+               return new Token(TokenType.IF, value, line, indent);
+         case "then":
+               return new Token(TokenType.THEN, value, line, indent);
+         case "else":
+               return new Token(TokenType.ELSE, value, line, indent);
+         case "repeat":
+               return new Token(TokenType.REPEAT, value, line, indent);
+         case "times":
+               return new Token(TokenType.TIMES, value, line, indent);
+         default:
+               return new Token(TokenType.IDENTIFIER, value, line, indent);
       }
    }
 }
