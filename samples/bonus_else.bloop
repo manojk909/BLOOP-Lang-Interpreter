@@ -1,0 +1,21 @@
+# ─────────────────────────────────────────────
+# bonus_else.bloop — Bonus: else block
+# ─────────────────────────────────────────────
+
+# Test 1: condition is true → should print "Grade: A"
+put 90 into score
+print "Checking score: " + score
+if score > 80 then:
+    print "Grade: A"
+else:
+    print "Grade: F"
+
+# Test 2: condition is false → should print "Grade: F"
+put 40 into score
+print "Checking score: " + score
+if score > 80 then:
+    print "Grade: A"
+else:
+    print "Grade: F"
+
+print "Done"
