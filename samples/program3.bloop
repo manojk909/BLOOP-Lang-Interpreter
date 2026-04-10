@@ -1,0 +1,8 @@
+# ─────────────────────────────────────────────
+# program3.bloop — Conditional (if / else)
+# Expected output: Pass
+# ─────────────────────────────────────────────
+
+put 85 into score
+if score > 50 then:
+    print "Pass"

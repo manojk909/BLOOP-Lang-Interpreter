@@ -1,0 +1,39 @@
+# ─────────────────────────────────────────────
+# bonus_extended.bloop — Extended Operators
+#   >= <= != string concat unary minus
+# ─────────────────────────────────────────────
+
+# Greater than or equal
+put 5 into x
+if x >= 5 then:
+    print "x >= 5: true"
+
+# Less than or equal
+put 3 into y
+if y <= 3 then:
+    print "y <= 3: true"
+
+# Not equal
+if x != 99 then:
+    print "x != 99: true"
+
+# String equality
+put "hello" into word
+if word == "hello" then:
+    print "word == hello: true"
+
+# String not equal
+if word != "world" then:
+    print "word != world: true"
+
+# String concatenation
+put "Score: " + x into msg
+print msg
+
+# Unary minus
+put -10 into neg
+print "Negative: " + neg
+
+# Arithmetic with unary minus
+put 20 + -5 into r
+print "20 + -5 = " + r

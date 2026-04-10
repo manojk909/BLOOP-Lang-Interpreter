@@ -1,0 +1,26 @@
+# ─────────────────────────────────────────────
+# bonus_nested.bloop — Bonus: nested blocks
+# ─────────────────────────────────────────────
+
+# if inside repeat: classify numbers 1 to 5
+put 1 into i
+repeat 5 times:
+    if i > 3 then:
+        print i + " is big"
+    else:
+        print i + " is small"
+    put i + 1 into i
+
+# Grade classifier using nested if/else
+put 92 into score
+print "Score: " + score
+if score >= 90 then:
+    print "Grade: A"
+else:
+    if score >= 75 then:
+        print "Grade: B"
+    else:
+        if score >= 60 then:
+            print "Grade: C"
+        else:
+            print "Grade: F"
