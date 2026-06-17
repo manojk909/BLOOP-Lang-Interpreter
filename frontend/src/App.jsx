@@ -84,7 +84,7 @@ export default function App() {
 
           {/* GitHub link */}
           <a
-            href="https://github.com"
+            href="https://github.com/manojk909/BLOOP-Lang-Interpreter"
             target="_blank"
             rel="noopener noreferrer"
             className="
