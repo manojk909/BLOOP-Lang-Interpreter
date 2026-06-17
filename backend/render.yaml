@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: bloop-backend
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    # Health check — Render marks the service healthy once this returns 200
+    healthCheckPath: /api/health
+    envVars:
+      # Tuned for Render free tier (512 MB RAM limit)
+      - key: JAVA_OPTS
+        value: -Xmx400m -Xms128m -XX:+UseG1GC -XX:MaxGCPauseMillis=200

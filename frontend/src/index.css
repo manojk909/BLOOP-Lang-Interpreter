@@ -1,0 +1,89 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Base ─────────────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: #0D1117;
+  color: #E6EDF3;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* Thin custom scrollbar for output panel */
+.custom-scroll::-webkit-scrollbar        { width: 6px; }
+.custom-scroll::-webkit-scrollbar-track  { background: transparent; }
+.custom-scroll::-webkit-scrollbar-thumb  { background: #30363D; border-radius: 3px; }
+.custom-scroll::-webkit-scrollbar-thumb:hover { background: #8B949E; }
+
+/* Spinner used on Run button */
+.spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Monaco editor host — fill the panel fully */
+.monaco-host {
+  width: 100%;
+  height: 100%;
+}
+
+/* Dropdown animation */
+.dropdown-enter {
+  animation: fadeIn 0.12s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Modal overlay */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(2px);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+/* Docs modal content */
+.docs-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+}
+.docs-table th,
+.docs-table td {
+  padding: 6px 10px;
+  border: 1px solid #30363D;
+  text-align: left;
+}
+.docs-table th {
+  background: #21262D;
+  color: #8B949E;
+  font-weight: 600;
+}
+.docs-table td code {
+  color: #A78BFA;
+}
