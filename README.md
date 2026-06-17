@@ -1,293 +1,246 @@
-# BLOOP Language Interpreter
+# 🟣 BLOOP Playground
 
-A lightweight, tree-walking interpreter for **BLOOP** — a simple, English-like programming language implemented in Java. BLOOP supports variables, arithmetic, string operations, conditionals, and loops, making it ideal as a learning project for understanding how interpreters work.
+An online playground for **BLOOP** — a tiny, indentation-based toy programming language.  
+Write and run BLOOP programs right in your browser, no installation needed.
 
----
+> **Live demo:** _https://bloop-playground.vercel.app_ (update after deploy)
 
-## Table of Contents
+![BLOOP Playground screenshot](./screenshot.png)
 
-- [Features](#features)
-- [Project Structure](#project-structure)
-- [Getting Started](#getting-started)
-- [BLOOP Language Reference](#bloop-language-reference)
-- [Sample Programs](#sample-programs)
-- [Architecture Overview](#architecture-overview)
-- [Error Handling](#error-handling)
+<!-- Replace the line above with an actual screenshot once deployed -->
 
 ---
 
-## Features
+## ✨ Features
 
-- **Variables** — store numbers and strings
-- **Arithmetic** — `+`, `-`, `*`, `/` with correct operator precedence
-- **String concatenation** — using `+`
-- **Comparisons** — `>`, `<`, `>=`, `<=`, `==`, `!=`
-- **Conditionals** — `if / then / else` blocks
-- **Loops** — `repeat N times` blocks
-- **Nesting** — blocks can be nested arbitrarily deep (indent-based scoping)
-- **Comments** — lines starting with `#` are ignored
-- **Unary minus** — negative number literals and expressions
+- **Monaco Editor** with full BLOOP syntax highlighting and autocomplete
+- **Instant execution** — code runs on a Spring Boot backend in milliseconds
+- **6 built-in examples** covering all language features
+- **Language reference docs** accessible from the header
+- `Ctrl+Enter` / `Cmd+Enter` keyboard shortcut to run code
+- Hard **5-second timeout** and **10,000-character output cap** for safety
+- Fully CORS-enabled for cross-origin Vercel ↔ Render communication
 
 ---
 
-## Project Structure
+## 🏗 Project Structure
 
 ```
-BLOOP-Lang-Interpreter-main/
-│
-├── Main.java                        # Entry point — reads .bloop file and runs interpreter
-│
-├── tokens/
-│   ├── Token.java                   # Token data class (type, value, line, indent level)
-│   ├── TokenType.java               # Enum of all token types (keywords, operators, literals)
-│   └── Tokenizer.java               # Lexer — converts raw source text into a token list
-│
-├── parser/
-│   └── Parser.java                  # Recursive-descent parser — builds AST instruction list
-│
-├── Nodes/
-│   ├── Expression.java              # Interface for all expression nodes
-│   ├── BinaryOpNode.java            # Arithmetic and comparison operations
-│   ├── NumberNode.java              # Numeric literal
-│   ├── StringNode.java              # String literal
-│   └── VariableNode.java            # Variable reference
-│
-├── Instructions/
-│   ├── Instruction.java             # Interface for all executable instructions
-│   ├── AssignInstruction.java       # put <expr> into <variable>
-│   ├── PrintInstruction.java        # print <expr>
-│   ├── IfInstruction.java           # if <condition> then / else
-│   └── RepeatInstruction.java       # repeat <count> times
-│
-├── interpreter/
-│   └── Interpreter.java             # Orchestrates tokenize → parse → execute pipeline
-│
-├── environment/
-│   └── Environment.java             # Variable store (name → value map)
-│
-└── samples/
-    ├── program1.bloop               # Arithmetic and variables
-    ├── program2.bloop               # String output
-    ├── program3.bloop               # Conditional (if / then)
-    ├── program4.bloop               # Conditional (if / then) — duplicate
-    ├── bonus_else.bloop             # if / else branching
-    ├── bonus_nested.bloop           # Nested loops and conditionals
-    └── bonus_extended.bloop         # Extended operators, string concat, unary minus
+bloop-playground/
+├── docker-compose.yml        # Local dev with Docker
+├── README.md
+├── backend/
+│   ├── Dockerfile            # Multi-stage Maven → JRE build
+│   ├── pom.xml               # Spring Boot 3.x, Java 17
+│   ├── render.yaml           # Render deployment config
+│   └── src/main/java/
+│       ├── com/bloop/        # Spring Boot app, API, service
+│       ├── interpreter/      # Modified Interpreter.java
+│       ├── tokens/           # Unchanged tokenizer
+│       ├── parser/           # Unchanged parser
+│       ├── Nodes/            # Unchanged AST nodes
+│       ├── Instructions/     # Unchanged instruction classes
+│       └── environment/      # Unchanged variable store
+└── frontend/
+    ├── Dockerfile            # Node build → Nginx serve
+    ├── vercel.json           # Vercel deployment config
+    ├── vite.config.js        # Vite + dev proxy
+    └── src/
+        ├── App.jsx           # Root layout
+        ├── components/       # Editor, OutputPanel, Toolbar, modals
+        ├── constants/        # Examples and docs content
+        └── hooks/            # useRunBloop fetch hook
 ```
 
 ---
 
-## Getting Started
+## 🚀 Local Development
 
-### Prerequisites
-
-- **Java 8 or higher** — verify with `java -version`
-
-### Compile
-
-From the project root directory:
+### Option A — Docker (recommended, zero setup)
 
 ```bash
-javac -d out $(find . -name "*.java")
+# Clone the repo
+git clone https://github.com/manojk909/bloop-playground.git
+cd bloop-playground
+
+# Build and start both services
+docker compose up --build
+
+# Frontend → http://localhost:3000
+# Backend  → http://localhost:8080
 ```
 
-Or compile manually in dependency order:
+### Option B — Without Docker
+
+**Prerequisites:** Java 17+, Maven 3.8+, Node.js 20+
 
 ```bash
-mkdir -p out
-javac -d out tokens/*.java Nodes/*.java environment/*.java Instructions/*.java interpreter/*.java Main.java
+# 1. Start the backend
+cd backend
+mvn spring-boot:run
+# API available at http://localhost:8080
+
+# 2. In a separate terminal, start the frontend
+cd frontend
+npm install
+npm run dev
+# App available at http://localhost:3000
 ```
-
-### Run a BLOOP Program
-
-```bash
-java -cp out Main samples/program1.bloop
-```
-
-Replace `samples/program1.bloop` with the path to any `.bloop` file.
-
-> **Note:** The interpreter only accepts files with the `.bloop` extension.
 
 ---
 
-## BLOOP Language Reference
+## ☁️ Deployment
+
+### Backend → Render
+
+1. Push this repository to GitHub.
+2. Go to **[render.com](https://render.com)** → **New** → **Web Service**.
+3. Connect your GitHub repo and set **Root Directory** to `backend`.
+4. Choose **Docker** as the runtime (Render auto-detects the `Dockerfile`).
+5. Set the environment variable:
+   ```
+   JAVA_OPTS = -Xmx400m -Xms128m -XX:+UseG1GC -XX:MaxGCPauseMillis=200
+   ```
+6. Deploy. Note the service URL (e.g. `https://bloop-backend.onrender.com`).
+
+> **Health check:** Render will ping `/api/health` every 30s. It's already configured in `render.yaml`.
+
+### Frontend → Vercel
+
+1. Go to **[vercel.com](https://vercel.com)** → **Add New Project**.
+2. Import the same GitHub repo, set **Root Directory** to `frontend`.
+3. Add the environment variable:
+   ```
+   VITE_API_URL = https://bloop-backend.onrender.com
+   ```
+   _(use the exact Render URL from the step above)_
+4. Click **Deploy**. Vercel auto-detects Vite from `vercel.json`.
+
+> **Important:** `VITE_API_URL` is baked into the bundle at build time by Vite.  
+> After changing it in Vercel's dashboard, you must **trigger a redeploy**.
+
+---
+
+## 🔑 Environment Variables
+
+| Variable       | Where set        | Example value                        | Purpose                         |
+| -------------- | ---------------- | ------------------------------------ | ------------------------------- |
+| `JAVA_OPTS`    | Render dashboard | `-Xmx400m -Xms128m`                  | JVM memory tuning               |
+| `VITE_API_URL` | Vercel dashboard | `https://bloop-backend.onrender.com` | Backend URL baked into frontend |
+
+---
+
+## 📖 BLOOP Language Cheatsheet
 
 ### Variables
 
-Variables are dynamically typed and hold either a number or a string. Use `put ... into` to assign:
-
-```
+```bloop
 put 42 into x
-put "hello" into greeting
-```
-
-### Arithmetic
-
-Standard arithmetic operators are supported with conventional precedence (`*` and `/` before `+` and `-`):
-
-```
-put 10 + 3 * 2 into result    # result = 16
-put x - 5 into y
-put 100 / 4 into quarter
+put "hello" into name
+put x + 1 into x
 ```
 
 ### Print
 
-Output a value or expression to the console:
-
-```
+```bloop
 print x
-print "Hello, World!"
-print "Score: " + score
+print "Hello, " + name
+print 3 + 4
+```
+
+### Arithmetic
+
+```bloop
+put 10 + 3 into a      # 13
+put 10 - 3 into b      # 7
+put 10 * 3 into c      # 30
+put 10 / 3 into d      # 3.333...
+put 2 + 3 * 4 into e   # 14  (* before +)
 ```
 
 ### String Concatenation
 
-Use `+` to join strings. If either operand is a string, the result is a string:
-
-```
-put "Hello " + "World" into msg
-print "Value: " + 42
+```bloop
+print "Score: " + score     # numbers auto-convert to string
+print "Hi " + "there"
 ```
 
-### Conditionals
+### Comparisons
 
-```
-if score > 50 then:
+| Operator | Meaning          |
+| -------- | ---------------- |
+| `==`     | equal            |
+| `!=`     | not equal        |
+| `>`      | greater than     |
+| `<`      | less than        |
+| `>=`     | greater or equal |
+| `<=`     | less or equal    |
+
+### If / Else
+
+```bloop
+if score > 80 then:
     print "Pass"
-
-if score >= 90 then:
-    print "Grade: A"
 else:
-    print "Grade: B"
+    print "Fail"
 ```
 
-The `else` block is optional. The colon (`:`) after `then` and `else` is also optional.
+`else` is optional. Blocks are delimited by indentation.
 
-### Loops
+### Repeat Loop
 
-Repeat a block a fixed number of times:
-
-```
+```bloop
 repeat 5 times:
-    print "Hello"
-```
+    print "hello"
 
-The count can be a variable or any numeric expression:
-
-```
 put 3 into n
 repeat n times:
-    print "Looping"
+    print "loop"
 ```
 
 ### Nesting
 
-`if` and `repeat` blocks can be nested to any depth. Nesting is determined by **indentation** (spaces or tabs):
-
-```
-put 1 into i
+```bloop
 repeat 5 times:
-    if i > 3 then:
-        print "big"
-    else:
-        print "small"
-    put i + 1 into i
+    if x > 0 then:
+        print "positive"
+    put x - 1 into x
 ```
 
-### Operators Reference
+### Comments
 
-| Operator | Description              | Works on        |
-|----------|--------------------------|-----------------|
-| `+`      | Addition / Concatenation | Numbers, Strings|
-| `-`      | Subtraction              | Numbers         |
-| `*`      | Multiplication           | Numbers         |
-| `/`      | Division                 | Numbers         |
-| `>`      | Greater than             | Numbers         |
-| `<`      | Less than                | Numbers         |
-| `>=`     | Greater than or equal    | Numbers         |
-| `<=`     | Less than or equal       | Numbers         |
-| `==`     | Equal                    | Numbers, Strings|
-| `!=`     | Not equal                | Numbers, Strings|
+```bloop
+# This is a comment
+put 5 into x    # inline comment
+```
+
+### Error Handling
+
+- Parse/runtime errors are returned in `stderr` (shown in red in the UI).
+- Programs that exceed **5 seconds** are killed; output returns a timeout message.
+- Output is capped at **10,000 characters** to prevent flooding.
 
 ---
 
-## Sample Programs
-
-### program1.bloop — Arithmetic
+## 🏛 Architecture
 
 ```
-put 10 into x
-put 3 into y
-put x + y * 2 into result
-print result
+Browser (Vercel)          Backend (Render / Docker)
+┌────────────────┐        ┌─────────────────────────────┐
+│  React + Vite  │        │  Spring Boot 3.x (Java 17)  │
+│  Monaco Editor │──POST──▶  POST /api/run              │
+│  Tailwind CSS  │◀──JSON─│    BloopService              │
+└────────────────┘        │    ├─ 5s timeout             │
+                          │    ├─ 10k char cap           │
+                          │    └─ OutputCapture (TL)     │
+                          │  Interpreter pipeline:       │
+                          │    Tokenizer → Parser        │
+                          │    → Instructions → Env      │
+                          └─────────────────────────────┘
 ```
-
-**Output:** `16`
-
-### bonus_else.bloop — If / Else
-
-```
-put 90 into score
-if score > 80 then:
-    print "Grade: A"
-else:
-    print "Grade: F"
-```
-
-**Output:** `Grade: A`
-
-### bonus_nested.bloop — Nested Blocks
 
 ---
 
-## Architecture Overview
+## 🤝 Contributing
 
-The interpreter uses a classic three-phase pipeline:
-
-```
-Source Code (.bloop)
-        │
-        ▼
-   [ Tokenizer ]         tokens/Tokenizer.java
-   Converts raw text into a flat list of Token objects.
-   Tracks line numbers and indentation levels.
-        │
-        ▼
-    [ Parser ]           parser/Parser.java
-   Recursive-descent parser.
-   Consumes the token list and builds a list of Instruction objects.
-   Expression nodes (AST) are constructed for all expressions.
-        │
-        ▼
-  [ Interpreter ]        interpreter/Interpreter.java
-   Walks the instruction list and calls execute(env) on each.
-   Expressions are evaluated recursively via evaluate(env).
-   All variables are stored in an Environment (a HashMap).
-        │
-        ▼
-     Output / Errors
-```
-
-**Key design patterns:**
-- `Instruction` interface — each statement type implements `execute(Environment)`
-- `Expression` interface — each expression node implements `evaluate(Environment)` and returns an `Object` (either `Double` or `String`)
-- `Environment` — a simple `LinkedHashMap<String, Object>` that maintains insertion order
-
----
-
-## Error Handling
-
-BLOOP provides descriptive error messages for common mistakes:
-
-| Error Type       | Example Message |
-|------------------|-----------------|
-| Unknown character | `Tokenizer error on line 3: unexpected character '@'` |
-| Unclosed string   | `Tokenizer error on line 2: string literal is not closed — missing closing '"'` |
-| Syntax error      | `Syntax error on line 5: expected 'into' after the value` |
-| Undefined variable | `Runtime error: variable not defined: 'x'. Did you forget to assign it with 'put ... into x'?` |
-| Type mismatch     | `Type error: left side of '-' must be a number, but got: "hello"` |
-| Division by zero  | `Runtime error: division by zero.` |
-| Non-integer repeat count | `Runtime error: 'repeat' count must be a whole number, but got: 2.5` |
-
-All errors are printed to `stderr` and the interpreter exits with code `1`.
+Pull requests welcome! The interpreter lives in `backend/src/main/java/` under the `tokens`, `parser`, `Nodes`, `Instructions`, `interpreter`, and `environment` packages. The Spring Boot wrapper is in `com/bloop/`.
