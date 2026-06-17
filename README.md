@@ -54,7 +54,7 @@ bloop-playground/
 
 ---
 
-## 🚀 Local Development
+## 🚀 Quick Start
 
 ### Option A — Docker (recommended, zero setup)
 
