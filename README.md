@@ -6,6 +6,7 @@ Write and run BLOOP programs right in your browser, no installation needed.
 > **Live demo:** _https://bloop-playground.vercel.app_ (update after deploy)
 
 ![BLOOP Playground screenshot](./image.png)
+![BLOOP Language Reference](./image-1.png)
 
 <!-- Replace the line above with an actual screenshot once deployed -->
 
