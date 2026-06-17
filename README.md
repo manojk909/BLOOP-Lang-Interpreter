@@ -6,7 +6,6 @@ Write and run BLOOP programs right in your browser, no installation needed.
 > **Live demo:** _https://bloop-lang-interpreter.vercel.app_
 
 ![BLOOP Playground screenshot](./image.png)
-![BLOOP Language Reference](./image-1.png)
 
 <!-- Replace the line above with an actual screenshot once deployed -->
 
@@ -89,48 +88,6 @@ npm run dev
 ```
 
 ---
-
-## ☁️ Deployment
-
-### Backend → Render
-
-1. Push this repository to GitHub.
-2. Go to **[render.com](https://render.com)** → **New** → **Web Service**.
-3. Connect your GitHub repo and set **Root Directory** to `backend`.
-4. Choose **Docker** as the runtime (Render auto-detects the `Dockerfile`).
-5. Set the environment variable:
-   ```
-   JAVA_OPTS = -Xmx400m -Xms128m -XX:+UseG1GC -XX:MaxGCPauseMillis=200
-   ```
-6. Deploy. Note the service URL (e.g. `https://bloop-backend.onrender.com`).
-
-> **Health check:** Render will ping `/api/health` every 30s. It's already configured in `render.yaml`.
-
-### Frontend → Vercel
-
-1. Go to **[vercel.com](https://vercel.com)** → **Add New Project**.
-2. Import the same GitHub repo, set **Root Directory** to `frontend`.
-3. Add the environment variable:
-   ```
-   VITE_API_URL = https://bloop-backend.onrender.com
-   ```
-   _(use the exact Render URL from the step above)_
-4. Click **Deploy**. Vercel auto-detects Vite from `vercel.json`.
-
-> **Important:** `VITE_API_URL` is baked into the bundle at build time by Vite.  
-> After changing it in Vercel's dashboard, you must **trigger a redeploy**.
-
----
-
-## 🔑 Environment Variables
-
-| Variable       | Where set        | Example value                        | Purpose                         |
-| -------------- | ---------------- | ------------------------------------ | ------------------------------- |
-| `JAVA_OPTS`    | Render dashboard | `-Xmx400m -Xms128m`                  | JVM memory tuning               |
-| `VITE_API_URL` | Vercel dashboard | `https://bloop-backend.onrender.com` | Backend URL baked into frontend |
-
----
-
 ## 📖 BLOOP Language Cheatsheet
 
 ### Variables
