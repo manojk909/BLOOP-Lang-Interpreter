@@ -102,17 +102,11 @@ function registerBloopLanguage(monaco) {
 
 export default function Editor({ value, onChange, onRun }) {
   const editorRef = useRef(null)
+  const onRunRef = useRef(onRun)
 
-  // Handle Ctrl/Cmd+Enter inside the Monaco editor itself
+  // Keep the ref updated with the latest onRun callback to avoid stale closures
   useEffect(() => {
-    if (!editorRef.current) return
-    const editor = editorRef.current
-    editor.addCommand(
-      // Monaco key codes: 2048 = Ctrl, 3 = Enter; 256 = meta (Cmd)
-      monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter,
-      () => onRun?.()
-    )
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    onRunRef.current = onRun
   }, [onRun])
 
   function handleBeforeMount(monaco) {
@@ -121,12 +115,10 @@ export default function Editor({ value, onChange, onRun }) {
 
   function handleMount(editor) {
     editorRef.current = editor
-    // Attach keyboard shortcut once mounted
-    const monaco = editor._themeService?._theme ? window.monaco : null
     editor.addCommand(
-      // 2048 = Ctrl/Cmd modifier
-      (2048 /* CtrlCmd */ | 3 /* Enter */),
-      () => onRun?.()
+      // Monaco key codes: 2048 = CtrlCmd, 3 = Enter
+      (2048 | 3),
+      () => onRunRef.current?.()
     )
     editor.focus()
   }
