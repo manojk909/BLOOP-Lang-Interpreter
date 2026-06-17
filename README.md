@@ -3,7 +3,7 @@
 An online playground for **BLOOP** — a tiny, indentation-based toy programming language.  
 Write and run BLOOP programs right in your browser, no installation needed.
 
-> **Live demo:** _https://bloop-playground.vercel.app_ (update after deploy)
+> **Live demo:** _https://bloop-lang-interpreter.vercel.app_
 
 ![BLOOP Playground screenshot](./image.png)
 ![BLOOP Language Reference](./image-1.png)
